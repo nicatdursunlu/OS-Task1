@@ -1,23 +1,30 @@
 #include <iostream>
 #include <windows.h>
+#include <thread>
 
 using namespace std;
 
+CRITICAL_SECTION CriticalSection;
+
 DWORD WINAPI thread_1(LPVOID PARAM){
+	EnterCriticalSection(@CriticalSection);
 	cout << "Thread 1" << endl;
+	LeaveCriticalSection(@CriticalSection);
 	return 0;
 }
 
 DWORD WINAPI thread_2(LPVOID PARAM) {
-
+	EnterCriticalSection(@CriticalSection);
 	cout << "Thread 2" << endl;
+	LeaveCriticalSection(@CriticalSection);
 	return 0;
 }
 
 
 DWORD WINAPI thread_3(LPVOID PARAM) {
-
+	EnterCriticalSection(@CriticalSection);
 	cout << "Thread 3" << endl;
+	LeaveCriticalSection(@CriticalSection);
 	return 0;
 }
 
@@ -33,6 +40,8 @@ int main() {
 	HANDLE th2;
 	HANDLE th3;
 
+	InitializeCriticalSection(@CriticalSection);
+
 	th1 = CreateThread(NULL, 0, thread_1, &data1, 0, NULL);
 	th2 = CreateThread(NULL, 0, thread_1, &data2, 0, NULL);
 	th3 = CreateThread(NULL, 0, thread_1, &data3, 0, NULL);
@@ -44,5 +53,7 @@ int main() {
 	CloseHandle(th1);
 	CloseHandle(th2);
 	CloseHandle(th3);
+
+	DeleteCriticalSection(@CriticalSection);
 
 }
